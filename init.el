@@ -29,6 +29,19 @@
 
 (column-number-mode)
 
+(defun ido-find-file-in-tag-files ()
+  (interactive)
+  (save-excursion
+    (let ((enable-recursive-minibuffers t))
+      (visit-tags-table-buffer))
+    (ido-completing-read "Project file: "
+                         (tags-table-files)
+                         nil t)))
+;(require 'gtags)
+(require 'ido)
+(ido-mode t)
+(setq ido-enable-flex-matching t)
+
 ;; clojure-mode
 (add-to-list 'load-path "~/opt/clojure-mode")
 (require 'clojure-mode)
