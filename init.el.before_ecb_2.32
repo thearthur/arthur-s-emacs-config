@@ -29,23 +29,6 @@
 
 (column-number-mode)
 
-(defun ido-find-file-in-tag-files ()
-  (interactive)
-  (save-excursion
-    (let ((enable-recursive-minibuffers t))
-      (visit-tags-table-buffer))
-    (ido-completing-read "Project file: "
-                         (tags-table-files)
-                         nil t)))
-(defun project-file ()
-  (interactive)
-  (find-file (ido-find-file-in-tag-files)))
-
-;(require 'gtags)
-(require 'ido)
-(ido-mode t)
-(setq ido-enable-flex-matching t)
-
 ;; clojure-mode
 (add-to-list 'load-path "~/opt/clojure-mode")
 (require 'clojure-mode)
@@ -53,12 +36,12 @@
 ;; swank-clojure
 (add-to-list 'load-path "~/opt/swank-clojure/src/emacs")
 
-;(setq swank-clojure-jar-path "~/.clojure/clojure.jar"
-;      swank-clojure-extra-classpaths (list
-;				      "~/opt/swank-clojure/src/main/clojure"
-;				      "~/.clojure/clojure-contrib.jar"))
+(setq swank-clojure-jar-path "~/.clojure/clojure.jar"
+      swank-clojure-extra-classpaths (list
+				      "~/opt/swank-clojure/src/main/clojure"
+				      "~/.clojure/clojure-contrib.jar"))
 
-;(require 'swank-clojure-autoload)
+(require 'swank-clojure-autoload)
 
 ;; slime
 (eval-after-load "slime"
@@ -105,19 +88,13 @@
 (setq dotfiles-dir (file-name-directory
                     (or (buffer-file-name) load-file-name)))
 
-;; Load up ELPA, the package manager
-
 (add-to-list 'load-path dotfiles-dir)
-
 (add-to-list 'load-path (concat dotfiles-dir "/elpa-to-submit"))
+(add-to-list 'load-path (concat dotfiles-dir "/elpa-to-submit/jabber"))
 
 (setq autoload-file (concat dotfiles-dir "loaddefs.el"))
 (setq package-user-dir (concat dotfiles-dir "elpa"))
 (setq custom-file (concat dotfiles-dir "custom.el"))
-
-(require 'package)
-(package-initialize)
-(require 'starter-kit-elpa)
 
 ;; These should be loaded on startup rather than autoloaded on demand
 ;; since they are likely to be used in every session
@@ -131,6 +108,14 @@
 
 ;; backport some functionality to Emacs 22 if needed
 (require 'dominating-file)
+
+;; Load up ELPA, the package manager
+
+(require 'package)
+(package-initialize)
+(require 'starter-kit-elpa)
+
+(load "elpa-to-submit/nxhtml/autostart")
 
 ;; Load up starter kit customizations
 
