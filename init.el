@@ -37,6 +37,10 @@
     (ido-completing-read "Project file: "
                          (tags-table-files)
                          nil t)))
+(defun project-file ()
+  (interactive)
+  (find-file (ido-find-file-in-tag-files)))
+
 ;(require 'gtags)
 (require 'ido)
 (ido-mode t)
