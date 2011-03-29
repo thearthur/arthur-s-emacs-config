@@ -45,7 +45,8 @@
 (require 'ido)
 (ido-mode t)
 (setq ido-enable-flex-matching t)
-
+(require 'rainbow-delimiters)
+(add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
 ;; clojure-mode
 (add-to-list 'load-path "~/opt/clojure-mode")
 (require 'clojure-mode)
