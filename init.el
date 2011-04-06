@@ -45,6 +45,8 @@
 (require 'ido)
 (ido-mode t)
 (setq ido-enable-flex-matching t)
+;(byte-compile-file "~/.emacs.d/rainbow-delimiters.el")
+(load-file "~/.emacs.d/rainbow-delimiters.el")
 (require 'rainbow-delimiters)
 (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
 ;; clojure-mode
