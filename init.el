@@ -49,6 +49,10 @@
 (load-file "~/.emacs.d/rainbow-delimiters.el")
 (require 'rainbow-delimiters)
 (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
+
+;; perl formatting for HyTrust
+(setq cperl-indent-level 3)
+
 ;; clojure-mode
 (add-to-list 'load-path "~/opt/clojure-mode")
 (require 'clojure-mode)
