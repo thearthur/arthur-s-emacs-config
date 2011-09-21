@@ -6,8 +6,6 @@
   ;; If there is more than one, they won't work right.
  )
 
-(set-fringe-style 0)
-
 ;;; init.el --- Where all the magic begins
 ;;
 ;; Part of the Emacs Starter Kit
@@ -43,6 +41,10 @@
 (require 'package)
 (package-initialize)
 (require 'starter-kit-elpa)
+
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/") t)
+(package-initialize)
 
 ;; These should be loaded on startup rather than autoloaded on demand
 ;; since they are likely to be used in every session
