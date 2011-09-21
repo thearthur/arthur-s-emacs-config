@@ -1,0 +1,40 @@
+;;; -*- coding: utf-8 -*-
+
+;; ----- ido-last-directory-list -----
+(
+ ("/Users/arthurulfeldt/autotestbed/src/" . "autotestbed/")
+ ("/Users/arthurulfeldt/autotestbed/" . "src/")
+ ("/Users/arthurulfeldt/" . "autotestbed/")
+)
+
+;; ----- ido-work-directory-list -----
+(
+ "/Users/arthurulfeldt/autotestbed/src/autotestbed/"
+ "/Users/arthurulfeldt/.emacs.d/"
+)
+
+;; ----- ido-work-file-list -----
+(
+ "core.clj"
+ "init.el"
+ "init.el.before_ecb_2.32"
+ "clojure.el"
+ "arthur.el"
+ "starter-kit-elpa.el"
+)
+
+;; ----- ido-dir-file-cache -----
+(
+ ("/Users/arthurulfeldt/autotestbed/src/autotestbed/" (20090 8864) "core.clj" "../" "./")
+
+ ("/Users/arthurulfeldt/" (20090 9367) "tmp/" "sshfs-static-leopard" "Sites/" "Public/" "Pictures/" "opt/" "Music/" "Movies/" "Library/" "hytrust-cfg-20110218.iso" "hta2/" "hta.bak3/" "hta.bak2/" "hta.bak/" "hta/" "emacs/" "Downloads/" "Documents/" "Dev/" "Desktop/" "clojure.el" "bin/" "autotestbed/" "arthur.el" "a/" ".Xauthority" ".viminfo" ".Trash/" ".subversion/" ".ssh.bak/" ".ssh/" ".smex-items" ".shsh/" ".serverauth.28795" ".serverauth.14673" ".recentf" ".profile.macports-saved_2011-09-21_at_09:07:40" ".profile" ".org.eclipse.epp.usagedata.recording.userId" ".netextender" ".macports/" ".MacOSX/" ".m2/" ".lesshst" ".lein/" ".ido.last~" ".ido.last" ".gitk" ".gitconfig" ".fontconfig/" ".emacs.d.old/" ".emacs.d/" ".DS_Store" ".cups/" ".CFUserTextEncoding" ".bashrc~" ".bashrc" ".bash_history" "../" "./")
+
+ ("/Users/arthurulfeldt/.emacs.d/" (20090 8302) "TODO" "simple-call-tree.el" "README.markdown" "rainbow-delimiters.el" "places" "package.el" "init.el~" "init.el.before_ecb_2.32" "elpa-to-submit/" "elpa/" "dominating-file.el" "custom.el.before_ecb_2.32" "COPYING" "backups/" "auto-save-list/" ".gitignore" ".git/" "../" "./")
+
+ ("/Users/arthurulfeldt/autotestbed/src/" (20089 23868) "autotestbed/" "../" "./")
+
+ ("/Users/arthurulfeldt/autotestbed/" (20089 23868) "test/" "src/" "README" "project.clj" ".gitignore" "../" "./")
+)
+
+;; ----- ido-unc-hosts-cache -----
+t
