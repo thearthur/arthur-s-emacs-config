@@ -1,4 +1,7 @@
 ;;; -*- coding: utf-8 -*-
 (("/Users/arthurulfeldt/.emacs.d/elpa/elisp-slime-nav-0.1/elisp-slime-nav-autoloads.el" . 706)
+ ("/Users/arthurulfeldt/.emacs.d/elpa/starter-kit-2.0.2/starter-kit.el" . 1869)
  ("/Users/arthurulfeldt/.emacs.d/elpa/starter-kit-bindings-2.0.2/starter-kit-bindings-autoloads.el" . 2120)
- ("/Users/arthurulfeldt/.emacs.d/elpa/starter-kit-lisp-2.0.3/starter-kit-lisp-autoloads.el" . 1915))
+ ("/Users/arthurulfeldt/.emacs.d/elpa/starter-kit-lisp-2.0.3/starter-kit-lisp-autoloads.el" . 1915)
+ ("/Users/arthurulfeldt/.emacs.d/init.el" . 192)
+ ("/Users/arthurulfeldt/autotestbed/src/autotestbed/core.clj" . 23))
