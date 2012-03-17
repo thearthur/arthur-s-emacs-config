@@ -3,5 +3,14 @@
              '("marmalade" . "http://marmalade-repo.org/packages/") t)
 (package-initialize)
 
-(load-file "arthur.el")
-(load-file "clojure.el")
+(when (not package-archive-contents)
+  (package-refresh-contents))
+
+;; Add in your own as you wish:
+(defvar my-packages '(starter-kit starter-kit-lisp starter-kit-bindings clojure-mode)
+  "A list of packages to ensure are installed at launch.")
+
+(dolist (p my-packages)
+  (when (not (package-installed-p p))
+    (package-install p))) ;; <-- how do i get these to load on start?
+
