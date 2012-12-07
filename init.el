@@ -18,3 +18,4 @@
 (setq org-directory "~/Dropbox/org/")
 (setq org-mobile-directory "~/Dropbox/org/")
 (setq org-mobile-inbox-for-pull "~/Dropbox/org/log.org")
+(setq org-agenda-files '("~/Dropbox/org/log.org"))
