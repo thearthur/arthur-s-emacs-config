@@ -8,7 +8,7 @@
   (package-refresh-contents))
 
 ;; Add in your own as you wish:
-(defvar my-packages '(starter-kit starter-kit-lisp starter-kit-bindings clojure-mode nrepl org org-plus-contrib)
+(defvar my-packages '(starter-kit starter-kit-lisp starter-kit-bindings clojure-mode nrepl org org-plus-contrib rainbow-delimiters)
   "A list of packages to ensure are installed at launch.")
 
 (dolist (p my-packages)
@@ -19,3 +19,6 @@
 (setq org-mobile-directory "~/Dropbox/org/")
 (setq org-mobile-inbox-for-pull "~/Dropbox/org/log.org")
 (setq org-agenda-files '("~/Dropbox/org/log.org"))
+
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+
