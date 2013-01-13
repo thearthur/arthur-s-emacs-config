@@ -1,6 +1,8 @@
-backups 
-auto-save-list 
-elpa
-places
-swank
+backups/**
+bak/**
+url/**
+auto-save-list/**
+elpa/**
+places**
+swank/**
 .smex-items
