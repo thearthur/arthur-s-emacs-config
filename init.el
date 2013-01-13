@@ -21,4 +21,4 @@
 (setq org-agenda-files '("~/Dropbox/org/log.org"))
 
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
-
+(remove-hook 'prog-mode-hook 'esk-turn-on-hl-line-mode)
