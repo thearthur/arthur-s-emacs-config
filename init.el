@@ -8,7 +8,8 @@
   (package-refresh-contents))
 
 ;; Add in your own as you wish:
-(defvar my-packages '(starter-kit starter-kit-lisp starter-kit-bindings clojure-mode nrepl auto-complete ac-nrepl org rainbow-delimiters)
+(defvar my-packages '(starter-kit starter-kit-lisp starter-kit-bindings clojure-mode
+                      nrepl auto-complete ac-nrepl org rainbow-delimiters)
   "A list of packages to ensure are installed at launch.")
 
 (dolist (p my-packages)
@@ -22,11 +23,22 @@
      '(add-to-list 'ac-modes 'nrepl-mode))
 (defun set-auto-complete-as-completion-at-point-function ()
   (setq completion-at-point-functions '(auto-complete)))
+
 (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
 
 (add-hook 'nrepl-mode-hook 'set-auto-complete-as-completion-at-point-function)
 (add-hook 'nrepl-interaction-mode-hook 'set-auto-complete-as-completion-at-point-function)
 (define-key nrepl-interaction-mode-map (kbd "C-c C-d") 'ac-nrepl-popup-doc)
+(add-hook 'prog-mode-hook 'auto-complete-mode)
+
+(add-hook 'nrepl-interaction-mode-hook
+            'nrepl-turn-on-eldoc-mode)
+
+(add-hook 'nrepl-mode-hook 'paredit-mode)
+(eval-after-load 'paredit '(define-key paredit-mode-map (kbd "C-M-]") 'paredit-forward-barf-sexp))
+(eval-after-load 'paredit '(define-key paredit-mode-map (kbd "C-M-[") 'paredit-backward-barf-sexp))
+(eval-after-load 'paredit '(define-key paredit-mode-map (kbd "M-]") 'paredit-forward-slurp-sexp))
+(eval-after-load 'paredit '(define-key paredit-mode-map (kbd "M-[") 'paredit-backward-slurp-sexp))
 
 (setq org-directory "~/Dropbox/org/")
 (setq org-mobile-directory "~/Dropbox/org/")
