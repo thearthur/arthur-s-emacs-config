@@ -40,10 +40,7 @@
 (eval-after-load 'paredit '(define-key paredit-mode-map (kbd "M-]") 'paredit-forward-slurp-sexp))
 (eval-after-load 'paredit '(define-key paredit-mode-map (kbd "M-[") 'paredit-backward-slurp-sexp))
 
-(setq org-directory "~/Dropbox/org/")
-(setq org-mobile-directory "~/Dropbox/org/")
-(setq org-mobile-inbox-for-pull "~/Dropbox/org/log.org")
-(setq org-agenda-files '("~/Dropbox/org/log.org"))
+(setq x-select-enable-clipboard t)
 
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 (remove-hook 'prog-mode-hook 'esk-turn-on-hl-line-mode)
