@@ -41,9 +41,20 @@
 (eval-after-load 'paredit '(define-key paredit-mode-map (kbd "M-[") 'paredit-backward-slurp-sexp))
 
 (setq x-select-enable-clipboard t)
-
+(add-hook 'clojure-mode-hook (lambda () (set-fill-column 0)))
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 (remove-hook 'prog-mode-hook 'esk-turn-on-hl-line-mode)
+
+;; make source code in org-mode files look pretty
+(setq org-src-fontify-natively t)
+;; if all children of a TODO are done, then change status of TODO to
+;; DONE
+(defun org-summary-todo (n-done n-not-done)
+  "Switch entry to DONE when all subentries are done, to TODO otherwise."
+  (let (org-log-done org-log-states)   ; turn off logging
+    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+(add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
