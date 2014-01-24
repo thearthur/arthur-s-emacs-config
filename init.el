@@ -8,8 +8,9 @@
   (package-refresh-contents))
 
 ;; Add in your own as you wish:
-(defvar my-packages '(starter-kit starter-kit-lisp starter-kit-bindings clojure-mode
-                      nrepl auto-complete ac-nrepl org rainbow-delimiters)
+(defvar my-packages '(starter-kit starter-kit-lisp starter-kit-bindings
+                      clojure-mode cider auto-complete ac-nrepl
+                      org rainbow-delimiters auto-complete cider)
   "A list of packages to ensure are installed at launch.")
 
 (dolist (p my-packages)
@@ -17,22 +18,30 @@
     (package-install p))) 
 
 (require 'ac-nrepl)
-(add-hook 'nrepl-mode-hook 'ac-nrepl-setup)
-(add-hook 'nrepl-interaction-mode-hook 'ac-nrepl-setup)
-(eval-after-load "auto-complete"
-     '(add-to-list 'ac-modes 'nrepl-mode))
+(add-hook 'cider-repl-mode-hook 'ac-nrepl-setup)
 (defun set-auto-complete-as-completion-at-point-function ()
   (setq completion-at-point-functions '(auto-complete)))
 
 (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
+(add-hook 'cider-mode-hook 'ac-nrepl-setup)
+(add-hook 'cider-interaction-mode-hook 'ac-nrepl-setup)
+(eval-after-load "auto-complete"
+  '(add-to-list 'ac-modes 'cider-mode))
 
-(add-hook 'nrepl-mode-hook 'set-auto-complete-as-completion-at-point-function)
-(add-hook 'nrepl-interaction-mode-hook 'set-auto-complete-as-completion-at-point-function)
-(define-key nrepl-interaction-mode-map (kbd "C-c C-d") 'ac-nrepl-popup-doc)
+(add-hook 'cider-mode-hook 'set-auto-complete-as-completion-at-point-function)
+(add-hook 'cider-interaction-mode-hook 'set-auto-complete-as-completion-at-point-function)
+(add-hook 'cider-mode-hook 'nrepl-turn-on-eldoc-mode)
+(setq nrepl-hide-special-buffers t)
+(setq cider-auto-select-error-buffer t)
+(setq cider-repl-display-in-current-window t)
+(setq cider-repl-print-length 100)
+(add-hook 'cider-repl-mode-hook 'paredit-mode)
+(add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
+
+(eval-after-load "cider"
+    '(define-key cider-mode-map (kbd "C-c C-d") 'ac-nrepl-popup-doc))
+
 (add-hook 'prog-mode-hook 'auto-complete-mode)
-
-(add-hook 'nrepl-interaction-mode-hook
-            'nrepl-turn-on-eldoc-mode)
 
 (add-hook 'nrepl-mode-hook 'paredit-mode)
 (eval-after-load 'paredit '(define-key paredit-mode-map (kbd "C-M-]") 'paredit-forward-barf-sexp))
