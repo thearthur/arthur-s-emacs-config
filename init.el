@@ -9,8 +9,8 @@
 
 ;; Add in your own as you wish:
 (defvar my-packages '(starter-kit starter-kit-lisp starter-kit-bindings
-                      clojure-mode cider auto-complete ac-nrepl
-                      org rainbow-delimiters auto-complete cider)
+                      clojure-mode dash cider auto-complete ac-nrepl
+                      org rainbow-delimiters auto-complete ace-jump-mode)
   "A list of packages to ensure are installed at launch.")
 
 (dolist (p my-packages)
@@ -30,10 +30,12 @@
 
 (add-hook 'cider-mode-hook 'set-auto-complete-as-completion-at-point-function)
 (add-hook 'cider-interaction-mode-hook 'set-auto-complete-as-completion-at-point-function)
-(add-hook 'cider-mode-hook 'nrepl-turn-on-eldoc-mode)
+(require 'cider-eldoc)
+(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+(add-hook 'cider-repl-mode-hook 'cider-turn-on-eldoc-mode)
 (setq nrepl-hide-special-buffers t)
 (setq cider-auto-select-error-buffer t)
-(setq cider-repl-display-in-current-window t)
+(setq cider-repl-display-in-current-window nil)
 (setq cider-repl-print-length 100)
 (add-hook 'cider-repl-mode-hook 'paredit-mode)
 (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
@@ -48,6 +50,16 @@
 (eval-after-load 'paredit '(define-key paredit-mode-map (kbd "C-M-[") 'paredit-backward-barf-sexp))
 (eval-after-load 'paredit '(define-key paredit-mode-map (kbd "M-]") 'paredit-forward-slurp-sexp))
 (eval-after-load 'paredit '(define-key paredit-mode-map (kbd "M-[") 'paredit-backward-slurp-sexp))
+
+(autoload
+  'ace-jump-mode-pop-mark
+  "ace-jump-mode"
+  "Ace jump back:-)"
+  t)
+(eval-after-load "ace-jump-mode"
+  '(ace-jump-mode-enable-mark-sync))
+(define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
+(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
 
 (setq x-select-enable-clipboard t)
 (add-hook 'clojure-mode-hook (lambda () (set-fill-column 0)))
