@@ -10,7 +10,8 @@
 ;; Add in your own as you wish:
 (defvar my-packages '(starter-kit starter-kit-lisp starter-kit-bindings
                       clojure-mode dash cider auto-complete ac-nrepl
-                      org rainbow-delimiters auto-complete ace-jump-mode)
+                      org rainbow-delimiters auto-complete ace-jump-mode go-mode
+                      projectile)
   "A list of packages to ensure are installed at launch.")
 
 (dolist (p my-packages)
@@ -75,6 +76,8 @@
   (let (org-log-done org-log-states)   ; turn off logging
     (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
 (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+
+(projectile-global-mode)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
