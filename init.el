@@ -14,7 +14,7 @@
                       idle-highlight-mode find-file-in-project smex ido-ubiquitous magit
                       clojure-mode dash cider auto-complete ac-nrepl
                       org rainbow-delimiters auto-complete ace-jump-mode go-mode
-                      projectile)
+                      projectile visual-regexp tuareg)
   "A list of packages to ensure are installed at launch.")
 
 (dolist (p my-packages)
@@ -98,11 +98,19 @@
 (setq org-src-fontify-natively t)
 ;; if all children of a TODO are done, then change status of TODO to
 ;; DONE
+;; make clojure code blocks work in org mode
+(require 'org)
+(require 'ob-clojure)
+
 (defun org-summary-todo (n-done n-not-done)
   "Switch entry to DONE when all subentries are done, to TODO otherwise."
   (let (org-log-done org-log-states)   ; turn off logging
     (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
 (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+(add-hook 'org-mode-hook 'org-indent-home)
+(setq org-hide-leading-stars t)
+(setq org-startup-truncated nil)
+(add-hook 'org-mode-hook 'flyspell-mode)
 
 (projectile-global-mode)
 
