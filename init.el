@@ -35,6 +35,8 @@
 
 (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
 
+(define-key global-map (kbd "C-x g") 'magit-status)
+
 (require 'cider)
 (require 'cider-eldoc)
 (add-hook 'cider-repl-mode-hook 'ac-nrepl-setup)
@@ -62,6 +64,22 @@
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 (add-hook 'clojure-mode-hook 'paredit-mode)
 (add-hook 'nrepl-mode-hook 'paredit-mode)
+
+;; Append result of evaluating previous expression (Clojure):
+(defun cider-eval-last-sexp-and-append ()
+  "Evaluate the expression preceding point and append result."
+  (interactive)
+  (let ((last-sexp (cider-last-sexp)))
+    ;; we have to be sure the evaluation won't result in an error
+    (cider-eval-and-get-value last-sexp)
+    (with-current-buffer (current-buffer)
+      (insert ";;=>")
+      (push-mark)
+      (cider-interactive-eval-print last-sexp)
+      (comment-region (mark) (point) -1)
+      (pop-mark))))
+
+(define-key clojure-mode-map (kbd "C-x y") 'cider-eval-last-sexp-and-append)
 
 (require 'paredit-everywhere)
 (add-hook 'prog-mode-hook 'paredit-everywhere-mode)
