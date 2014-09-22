@@ -36,7 +36,7 @@
 (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
 
 (define-key global-map (kbd "C-x g") 'magit-status)
-
+(define-key global-map (kbd "C-c r") 'revert-buffer)
 (require 'cider)
 (require 'cider-eldoc)
 (add-hook 'cider-repl-mode-hook 'ac-nrepl-setup)
@@ -143,4 +143,5 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "color-234" :foreground "unspecified-fg" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 1 :width normal :foundry "default" :family "default")))))
+ '(default ((t (:inherit nil :stipple nil :background "color-234" ;; :foreground "unspecified-fg"
+                         :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 1 :width normal :foundry "default" :family "default")))))
