@@ -12,24 +12,14 @@
 (defvar my-packages '(better-defaults
 		      paredit paredit-everywhere
                       idle-highlight-mode find-file-in-project smex ido-ubiquitous magit
-                      clojure-mode dash cider auto-complete ac-nrepl
-                      org rainbow-delimiters auto-complete ace-jump-mode go-mode
-                      projectile visual-regexp tuareg)
+                      clojure-mode dash cider company
+                      org rainbow-delimiters ace-jump-mode go-mode
+                      projectile visual-regexp tuareg clj-refactor cider-spy)
   "A list of packages to ensure are installed at launch.")
 
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p))) 
-
-(require 'ac-nrepl)
-
-(eval-after-load "auto-complete"
-  '(progn
-     (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
-     (add-to-list 'ac-modes 'cider-mode)
-     (defun set-auto-complete-as-completion-at-point-function ()
-       (setq completion-at-point-functions '(auto-complete)))
-     (add-hook 'prog-mode-hook 'auto-complete-mode)))
 
 (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
 
@@ -39,12 +29,6 @@
 (define-key global-map (kbd "C-c r") 'revert-buffer)
 (require 'cider)
 (require 'cider-eldoc)
-(add-hook 'cider-repl-mode-hook 'ac-nrepl-setup)
-(add-hook 'cider-mode-hook 'ac-nrepl-setup)
-(add-hook 'cider-interaction-mode-hook 'ac-nrepl-setup)
-(define-key cider-mode-map (kbd "C-c C-d") 'ac-nrepl-popup-doc)
-(add-hook 'cider-mode-hook 'set-auto-complete-as-completion-at-point-function)
-(add-hook 'cider-interaction-mode-hook 'set-auto-complete-as-completion-at-point-function)
 (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 (add-hook 'cider-repl-mode-hook 'cider-turn-on-eldoc-mode)
 (setq nrepl-hide-special-buffers t)
@@ -52,8 +36,20 @@
 (setq cider-repl-display-in-current-window nil)
 (setq cider-repl-print-length 100)
 
+(require 'company)
+(global-company-mode)
+(setq company-idle-delay .2
+      company-tooltip-flip-when-above t)
+(global-set-key (kbd "C-<tab>") 'company-manual-begin)
+(define-key company-active-map (kbd "C-n") 'company-select-next)
+(define-key company-active-map (kbd "C-p") 'company-select-previous)
 
-
+(require 'clj-refactor)
+(add-hook 'clojure-mode-hook
+          (lambda ()
+            (clj-refactor-mode 1)
+            (cljr-add-keybindings-with-prefix "C-c C-m")))
+(add-hook 'nrepl-connected-hook #'cljr-update-artifact-cache)
 
 (require 'paredit)
 (define-key paredit-mode-map (kbd "C-M-]") 'paredit-forward-barf-sexp)
