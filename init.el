@@ -14,16 +14,22 @@
                       idle-highlight-mode find-file-in-project smex ido-ubiquitous magit
                       clojure-mode dash cider company
                       org rainbow-delimiters ace-jump-mode go-mode
-                      projectile visual-regexp tuareg clj-refactor cider-spy)
+                      projectile visual-regexp tuareg clj-refactor cider-spy
+                      powerline elisp-slime-nav
+                      color-theme-solarized soft-charcoal-theme spacegray-theme ample-theme zenburn-theme
+                      rainbow-identifiers)
   "A list of packages to ensure are installed at launch.")
 
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p))) 
 
-(add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
+(load-theme 'zenburn t)
 
+(add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
+(add-hook 'prog-mode-hook 'rainbow-identifiers-mode)
 (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+(add-hook 'emacs-lisp-mode-hook #'elisp-slime-nav-mode)
 
 (define-key global-map (kbd "C-x g") 'magit-status)
 (define-key global-map (kbd "C-c r") 'revert-buffer)
@@ -128,16 +134,26 @@
 
 (projectile-global-mode)
 
+(require 'powerline)
+(powerline-default-theme)
+ 
+(custom-set-faces
+  '(default ((t (:inherit nil :stipple nil :background "color-233" ;; :foreground "unspecified-fg"
+                          :inverse-video nil
+                          :box nil
+                          :strike-through nil
+                          :overline nil
+                          :underline nil
+                          :slant normal
+                          :weight normal
+                          :height 1
+                          :width normal
+                          :foundry "default"
+                          :family "default")))))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(safe-local-variable-values (quote ((epa-file-encrypt-to arthur@ulfeldt\.com) (whitespace-line-column . 80) (lexical-binding . t)))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "color-234" ;; :foreground "unspecified-fg"
-                         :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 1 :width normal :foundry "default" :family "default")))))
