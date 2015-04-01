@@ -17,7 +17,8 @@
                       projectile visual-regexp tuareg clj-refactor cider-spy
                       powerline elisp-slime-nav
                       color-theme-solarized soft-charcoal-theme spacegray-theme ample-theme zenburn-theme
-                      rainbow-identifiers)
+                      rainbow-identifiers yaml-mode markdown-mode
+                      flycheck-clojure flycheck-pos-tip)
   "A list of packages to ensure are installed at launch.")
 
 (dolist (p my-packages)
@@ -29,10 +30,11 @@
 (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
 (add-hook 'prog-mode-hook 'rainbow-identifiers-mode)
 (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
-(add-hook 'emacs-lisp-mode-hook #'elisp-slime-nav-mode)
+(add-hook 'emacs-lisp-mode-hook #'turn-on-elisp-slime-nav-mode)
 
 (define-key global-map (kbd "C-x g") 'magit-status)
 (define-key global-map (kbd "C-c r") 'revert-buffer)
+
 (require 'cider)
 (require 'cider-eldoc)
 (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
@@ -41,7 +43,7 @@
 (setq cider-auto-select-error-buffer t)
 (setq cider-repl-display-in-current-window nil)
 (setq cider-repl-print-length 100)
-
+(setq cider-prompt-for-symbol nil)
 (require 'company)
 (global-company-mode)
 (setq company-idle-delay .2
@@ -114,13 +116,21 @@
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 (remove-hook 'prog-mode-hook 'esk-turn-on-hl-line-mode)
 
-;; make source code in org-mode files look pretty
-(setq org-src-fontify-natively t)
+(eval-after-load 'flycheck '(flycheck-clojure-setup))
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
+(eval-after-load 'flycheck
+  '(setq flycheck-display-errors-function #'flycheck-pos-tip-error-messages))
+
 ;; if all children of a TODO are done, then change status of TODO to
 ;; DONE
 ;; make clojure code blocks work in org mode
 (require 'org)
 (require 'ob-clojure)
+(define-key org-mode-map (kbd "C-c SPC") 'ace-jump-mode)
+(setq org-agenda-files (list "~/ownCloud/org/log.org.gpg"))
+;; make source code in org-mode files look pretty
+(setq org-src-fontify-natively t)
 
 (defun org-summary-todo (n-done n-not-done)
   "Switch entry to DONE when all subentries are done, to TODO otherwise."
@@ -130,6 +140,8 @@
 (add-hook 'org-mode-hook 'org-indent-home)
 (setq org-hide-leading-stars t)
 (setq org-startup-truncated nil)
+(setq org-log-done 'time)
+(setq org-tags-column (- 4 (window-width)))
 (add-hook 'org-mode-hook 'flyspell-mode)
 
 (projectile-global-mode)
