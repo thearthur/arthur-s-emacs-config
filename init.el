@@ -148,24 +148,21 @@
 
 (require 'powerline)
 (powerline-default-theme)
- 
+
+(add-to-list 'load-path "~/.emacs.d/dockerfile-mode/")
+(require 'dockerfile-mode)
+(add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+
 (custom-set-faces
-  '(default ((t (:inherit nil :stipple nil :background "color-233" ;; :foreground "unspecified-fg"
-                          :inverse-video nil
-                          :box nil
-                          :strike-through nil
-                          :overline nil
-                          :underline nil
-                          :slant normal
-                          :weight normal
-                          :height 1
-                          :width normal
-                          :foundry "default"
-                          :family "default")))))
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:inherit nil :stipple nil :background "color-233" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 1 :width normal :foundry "default" :family "default")))))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(safe-local-variable-values (quote ((epa-file-encrypt-to arthur@ulfeldt\.com) (whitespace-line-column . 80) (lexical-binding . t)))))
+ '(safe-local-variable-values (quote ((docker-image-name . "yummly/api") (epa-file-encrypt-to arthur@ulfeldt\.com) (whitespace-line-column . 80) (lexical-binding . t)))))

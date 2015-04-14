@@ -4,3 +4,6 @@
 [submodule "slime"]
 	path = slime
 	url = git://git.boinkor.net/slime.git
+[submodule "dockerfile-mode"]
+	path = dockerfile-mode
+	url = git@github.com:spotify/dockerfile-mode.git
