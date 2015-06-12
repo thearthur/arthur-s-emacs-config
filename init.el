@@ -32,6 +32,7 @@
 (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
 (add-hook 'emacs-lisp-mode-hook #'turn-on-elisp-slime-nav-mode)
 
+(setq magit-last-seen-setup-instructions "1.4.0")
 (define-key global-map (kbd "C-x g") 'magit-status)
 (define-key global-map (kbd "C-c r") 'revert-buffer)
 
@@ -116,7 +117,7 @@
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 (remove-hook 'prog-mode-hook 'esk-turn-on-hl-line-mode)
 
-(eval-after-load 'flycheck '(flycheck-clojure-setup))
+;(eval-after-load 'flycheck '(flycheck-clojure-setup))
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
 (eval-after-load 'flycheck
