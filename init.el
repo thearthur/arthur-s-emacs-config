@@ -144,7 +144,8 @@
 (setq org-log-done 'time)
 (setq org-tags-column (- 4 (window-width)))
 (add-hook 'org-mode-hook 'flyspell-mode)
-
+(add-hook 'prog-mode-hook (lambda ()
+                             (flyspell-prog-mode)))
 (projectile-global-mode)
 
 (require 'powerline)
