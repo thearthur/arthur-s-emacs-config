@@ -1,6 +1,6 @@
 (require 'package)
-
 (package-initialize)
+
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
@@ -31,12 +31,17 @@
                       projectile visual-regexp
                       powerline elisp-slime-nav
                       color-theme-solarized soft-charcoal-theme spacegray-theme ample-theme zenburn-theme
-                      rainbow-identifiers yaml-mode markdown-mode)
+                      rainbow-identifiers yaml-mode markdown-mode use-package)
   "A list of packages to ensure are installed at launch.")
 
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
+
+(eval-when-compile
+  (require 'use-package))
+(require 'diminish)
+(require 'bind-key)
 
 (load-theme 'zenburn t)
 
@@ -104,16 +109,17 @@
 
 (add-hook 'clojure-mode-hook (lambda () (set-fill-column 0)))
 
+(use-package ace-jump-mode
+  :commands ace-jump-mode
+  :bind (("C-x SPC" . ace-jump-mode-pop-mark)
+         ("C-c SPC" . ace-jump-mode))
+  :config (ace-jump-mode-enable-mark-sync))
+
 (autoload
   'ace-jump-mode-pop-mark
   "ace-jump-mode"
   "Ace jump back:-)"
   t)
-
-(eval-after-load "ace-jump-mode"
-  '(ace-jump-mode-enable-mark-sync))
-(define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
-(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
 
 (setq x-select-enable-clipboard t)
 (defun yank-to-x-clipboard ()
@@ -182,7 +188,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (markdown-mode yaml-mode rainbow-identifiers zenburn-theme ample-theme spacegray-theme soft-charcoal-theme color-theme-solarized elisp-slime-nav powerline visual-regexp projectile go-mode ace-jump-mode rainbow-delimiters company magit ido-ubiquitous smex find-file-in-project idle-highlight-mode paredit-everywhere better-defaults flycheck-pos-tip flycheck-clojure cider-spy clj-refactor cider clojure-mode))))
+    (use-package markdown-mode yaml-mode rainbow-identifiers zenburn-theme ample-theme spacegray-theme soft-charcoal-theme color-theme-solarized elisp-slime-nav powerline visual-regexp projectile go-mode ace-jump-mode rainbow-delimiters company magit ido-ubiquitous smex find-file-in-project idle-highlight-mode paredit-everywhere better-defaults flycheck-pos-tip flycheck-clojure cider-spy clj-refactor cider clojure-mode))))
 
 (provide 'init)
 ;;; init.el ends here
