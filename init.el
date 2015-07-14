@@ -1,29 +1,42 @@
 (require 'package)
+
 (package-initialize)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
-
+(add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
 
 (when (not package-archive-contents)
   (package-refresh-contents))
+
+(defvar unstable-packages '(clojure-mode cider clj-refactor cider-spy flycheck-clojure flycheck-pos-tip)
+  "A list of packages to ensure are installed at launch.")
+
+(dolist (p unstable-packages)
+  (when (not (package-installed-p p))
+    (package-install p)))
+
+(setq package-archive-priorities
+      '(("melpa-stable" . 20)
+        ("marmalade" . 20)
+        ("org" . 15)
+        ("melpa" . 0)))
 
 ;; Add in your own as you wish:
 (defvar my-packages '(better-defaults
 		      paredit paredit-everywhere
                       idle-highlight-mode find-file-in-project smex ido-ubiquitous magit
-                      clojure-mode dash cider company
+                      dash company
                       org rainbow-delimiters ace-jump-mode go-mode
-                      projectile visual-regexp tuareg clj-refactor cider-spy
+                      projectile visual-regexp
                       powerline elisp-slime-nav
                       color-theme-solarized soft-charcoal-theme spacegray-theme ample-theme zenburn-theme
-                      rainbow-identifiers yaml-mode markdown-mode
-                      flycheck-clojure flycheck-pos-tip)
+                      rainbow-identifiers yaml-mode markdown-mode)
   "A list of packages to ensure are installed at launch.")
 
 (dolist (p my-packages)
   (when (not (package-installed-p p))
-    (package-install p))) 
+    (package-install p)))
 
 (load-theme 'zenburn t)
 
@@ -160,11 +173,16 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "color-233" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 1 :width normal :foundry "default" :family "default")))))
+ )
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(safe-local-variable-values (quote ((docker-image-name . "yummly/api") (epa-file-encrypt-to arthur@ulfeldt\.com) (whitespace-line-column . 80) (lexical-binding . t)))))
+ '(package-selected-packages
+   (quote
+    (markdown-mode yaml-mode rainbow-identifiers zenburn-theme ample-theme spacegray-theme soft-charcoal-theme color-theme-solarized elisp-slime-nav powerline visual-regexp projectile go-mode ace-jump-mode rainbow-delimiters company magit ido-ubiquitous smex find-file-in-project idle-highlight-mode paredit-everywhere better-defaults flycheck-pos-tip flycheck-clojure cider-spy clj-refactor cider clojure-mode))))
+
+(provide 'init)
+;;; init.el ends here
