@@ -145,10 +145,20 @@
   (add-hook 'prog-mode-hook #'yas-minor-mode)
   (diminish 'yas-minor-mode))
 
+(use-package avy
+  :ensure t
+  :bind (("C-c SPC" . avy-goto-char)
+         ("M-g g" . avy-goto-line))
+  :config (progn (eval-after-load 'conf-mode
+                   '(bind-key "C-c SPC" 'avy-goto-word-1 conf-mode-map))))
+
 (use-package clojure-mode
   :ensure t
   :config
-  (yas-global-mode 1))
+  (yas-global-mode 1)
+  (add-hook 'clojure-mode-hook
+            (lambda ()
+              (define-key clojure-mode-map (kbd "C-c SPC") 'avy-goto-word-1))))
 
 (require 'diminish)
 (require 'bind-key)
@@ -171,8 +181,11 @@
   (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'emacs-lisp-mode-hook #'turn-on-elisp-slime-nav-mode)
-  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-  (add-hook 'cider-repl-mode-hook 'cider-turn-on-eldoc-mode))
+  (add-hook 'cider-mode-hook 'eldoc-mode)
+  (add-hook 'cider-repl-mode-hook 'eldoc-mode)
+  (set-face-attribute 'cider-deprecated-face nil
+                      :foreground nil
+                      :background "#655"))
 
 (use-package cider-eldoc
   :config
@@ -320,21 +333,25 @@ includes the deletion of new lines."
     (interactive)
       (just-one-space -1))
 
-(use-package scala-mode2
+;; (use-package scala-mode2
+;;   :ensure t
+;;   :config (use-package ensime
+;;             :ensure t
+;;             :config (progn (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+;;                            (defun scala/enable-eldoc ()
+;;                              "Show error message or type name at point by Eldoc."
+;;                              (setq-local eldoc-documentation-function
+;;                                          #'(lambda ()
+;;                                              (when (ensime-connected-p)
+;;                                                (let ((err (ensime-print-errors-at-point)))
+;;                                                  (or (and err (not (string= err "")) err)
+;;                                                      (ensime-print-type-at-point))))))
+;;                              (eldoc-mode +1))
+;;                            (add-hook 'scala-mode-hook 'scala/enable-eldoc))))
+
+(use-package magit-gh-pulls
   :ensure t
-  :config (use-package ensime
-            :ensure t
-            :config (progn (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
-                           (defun scala/enable-eldoc ()
-                             "Show error message or type name at point by Eldoc."
-                             (setq-local eldoc-documentation-function
-                                         #'(lambda ()
-                                             (when (ensime-connected-p)
-                                               (let ((err (ensime-print-errors-at-point)))
-                                                 (or (and err (not (string= err "")) err)
-                                                     (ensime-print-type-at-point))))))
-                             (eldoc-mode +1))
-                           (add-hook 'scala-mode-hook 'scala/enable-eldoc))))
+  :config (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -348,6 +365,7 @@ includes the deletion of new lines."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
     ((progn t elisp--witness--lisp)
