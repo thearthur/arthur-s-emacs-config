@@ -114,18 +114,6 @@
 (use-package elisp-slime-nav
   :ensure t)
 
-(use-package color-theme-solarized
-  :ensure t)
-
-(use-package soft-charcoal-theme
-  :ensure t)
-
-(use-package spacegray-theme
-  :ensure t)
-
-(use-package ample-theme
-  :ensure t)
-
 (use-package zenburn-theme
   :ensure t)
 
@@ -163,7 +151,7 @@
 (require 'diminish)
 (require 'bind-key)
 
-;(load-theme 'zenburn t)
+(load-theme 'zenburn t)
 
 
 (use-package magit
@@ -184,6 +172,9 @@
   (add-hook 'cider-mode-hook 'eldoc-mode)
   (add-hook 'cider-repl-mode-hook 'eldoc-mode)
   (set-face-attribute 'cider-deprecated-face nil
+                      :foreground nil
+                      :background "#655")
+  (set-face-attribute 'cider-test-error-face nil
                       :foreground nil
                       :background "#655"))
 
