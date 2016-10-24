@@ -16,11 +16,11 @@
 ;;   (when (not (package-installed-p p))
 ;;     (package-install p)))
 
-(setq package-archive-priorities
-      '(("melpa-stable" . 20)
+ (setq package-archive-priorities
+      '(("melpa" . 99)
         ("marmalade" . 20)
         ("org" . 15)
-        ("melpa" . 0)))
+        ("melpa-stable" . 0)))
 
 ;; Add in your own as you wish:
 (defvar my-packages '(better-defaults
