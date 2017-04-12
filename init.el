@@ -144,6 +144,7 @@
   :ensure t
   :config
   (yas-global-mode 1)
+  (add-hook 'before-save-hook #'delete-trailing-whitespace)
   (add-hook 'clojure-mode-hook
             (lambda ()
               (define-key clojure-mode-map (kbd "C-c SPC") 'avy-goto-word-1))))
@@ -206,7 +207,7 @@
               (clj-refactor-mode 1)
               ;(cljr-add-keybindings-with-prefix "C-c C-m")
               (define-key cider-mode-map (kbd "C-c C-m") 'hydra-cljr-help-menu/body)))
- 
+
   (add-hook 'nrepl-connected-hook #'cljr-update-artifact-cache)
   (define-key clojure-mode-map (kbd "C-c C-m") 'hydra-cljr-help-menu/body)
   (diminish 'clj-refactor-mode))
