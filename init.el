@@ -1,6 +1,23 @@
 (require 'package)
 (package-initialize)
 
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+;; Copyright 2010, 2012, 2013, 2014, 2015 Arthur Ulfeldt
+
+
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
@@ -176,7 +193,8 @@
                       :background "#655")
   (set-face-attribute 'cider-test-error-face nil
                       :foreground nil
-                      :background "#655"))
+                      :background "#655")
+  (setq cljr-warn-on-eval nil))
 
 (use-package cider-eldoc
   :config
@@ -344,6 +362,14 @@ includes the deletion of new lines."
   :ensure t
   :config (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
 
+
+(use-package frames-only-mode
+  :ensure t
+  :config (frames-only-mode))
+
+(use-package haskell-mode
+  :ensure t)
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -359,8 +385,67 @@ includes the deletion of new lines."
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    ((progn t elisp--witness--lisp)
-     which-key dockerfile-mode flycheck clj-refactor markdown-mode yaml-mode rainbow-identifiers zenburn-theme ample-theme spacegray-theme soft-charcoal-theme color-theme-solarized elisp-slime-nav powerline visual-regexp projectile go-mode ace-jump-mode rainbow-delimiters company magit ido-ubiquitous smex find-file-in-project idle-highlight-mode paredit-everywhere paredit color-theme better-defaults cider-spy cider use-package))))
+    (haskell-mode
+     (progn t elisp--witness--lisp)
+     which-key dockerfile-mode flycheck clj-refactor markdown-mode yaml-mode rainbow-identifiers zenburn-theme ample-theme spacegray-theme soft-charcoal-theme color-theme-solarized elisp-slime-nav powerline visual-regexp projectile go-mode ace-jump-mode rainbow-delimiters company magit ido-ubiquitous smex find-file-in-project idle-highlight-mode paredit-everywhere paredit color-theme better-defaults cider-spy cider use-package)))
+ '(safe-local-variable-values
+   (quote
+    ((eval progn
+           (put
+            (quote defendpoint)
+            (quote clojure-doc-string-elt)
+            3)
+           (put
+            (quote api/defendpoint)
+            (quote clojure-doc-string-elt)
+            3)
+           (put
+            (quote defsetting)
+            (quote clojure-doc-string-elt)
+            2)
+           (put
+            (quote setting/defsetting)
+            (quote clojure-doc-string-elt)
+            2)
+           (put
+            (quote s/defn)
+            (quote clojure-doc-string-elt)
+            2)
+           (define-clojure-indent
+             (api-let 2)
+             (assert 1)
+             (assoc 1)
+             (auto-parse 1)
+             (catch-api-exceptions 0)
+             (check 1)
+             (checkp 1)
+             (context 2)
+             (create-database-definition 1)
+             (ex-info 1)
+             (execute-query 1)
+             (execute-sql! 2)
+             (expect 0)
+             (expect-with-all-engines 0)
+             (expect-with-engine 1)
+             (expect-with-engines 1)
+             (let-400 1)
+             (let-404 1)
+             (let-500 1)
+             (match 1)
+             (match-$ 1)
+             (merge-with 1)
+             (post-select 1)
+             (pre-delete 1)
+             (pre-insert 1)
+             (pre-update 1)
+             (project 1)
+             (qp-expect-with-engines 1)
+             (render-file 1)
+             (resolve-private-vars 1)
+             (select 1)
+             (sync-in-context 2)
+             (when-testing-engine 1)
+             (with-redefs-fn 1)))))))
 
 (provide 'init)
 ;;; init.el ends here
