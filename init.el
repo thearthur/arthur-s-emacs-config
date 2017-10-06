@@ -359,16 +359,29 @@ includes the deletion of new lines."
 ;;                              (eldoc-mode +1))
 ;;                            (add-hook 'scala-mode-hook 'scala/enable-eldoc))))
 
-(use-package magit-gh-pulls
+;; guthub stuff
+(use-package magithub
+  :after magit
   :ensure t
-  :config (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
-
+  :config (magithub-feature-autoinject t))
 
 (use-package frames-only-mode
   :ensure t
   :config (frames-only-mode))
 
 (use-package haskell-mode
+  :ensure t)
+
+(use-package emojify
+  ; :smiley-cat: :white-check-mark:
+  :ensure t
+  :config (add-hook 'after-init-hook #'global-emojify-mode))
+
+(use-package org-bullets
+  :ensure t
+  :config (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+(use-package git-link
   :ensure t)
 
 (custom-set-faces
@@ -386,12 +399,13 @@ includes the deletion of new lines."
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (haskell-mode
-     (progn t elisp--witness--lisp)
-     which-key dockerfile-mode flycheck clj-refactor markdown-mode yaml-mode rainbow-identifiers zenburn-theme ample-theme spacegray-theme soft-charcoal-theme color-theme-solarized elisp-slime-nav powerline visual-regexp projectile go-mode ace-jump-mode rainbow-delimiters company magit ido-ubiquitous smex find-file-in-project idle-highlight-mode paredit-everywhere paredit color-theme better-defaults cider-spy cider use-package)))
+    (git-link org-bullets emojify emacs-emojify haskell-mode
+              (progn t elisp--witness--lisp)
+              which-key dockerfile-mode flycheck clj-refactor markdown-mode yaml-mode rainbow-identifiers zenburn-theme ample-theme spacegray-theme soft-charcoal-theme color-theme-solarized elisp-slime-nav powerline visual-regexp projectile go-mode ace-jump-mode rainbow-delimiters company magit ido-ubiquitous smex find-file-in-project idle-highlight-mode paredit-everywhere paredit color-theme better-defaults cider-spy cider use-package)))
  '(safe-local-variable-values
    (quote
-    ((eval progn
+    ((prettier-js-args "--single-quote")
+     (eval progn
            (put
             (quote defendpoint)
             (quote clojure-doc-string-elt)
