@@ -40,16 +40,16 @@
         ("melpa-stable" . 0)))
 
 ;; Add in your own as you wish:
-(defvar my-packages '(better-defaults
-		      paredit paredit-everywhere
-                      idle-highlight-mode find-file-in-project smex ido-ubiquitous magit
-                      dash company
-                      org rainbow-delimiters ace-jump-mode go-mode
-                      projectile visual-regexp
-                      powerline elisp-slime-nav
-                      color-theme-solarized soft-charcoal-theme spacegray-theme ample-theme zenburn-theme
-                      rainbow-identifiers yaml-mode markdown-mode use-package)
-  "A list of packages to ensure are installed at launch.")
+;; (defvar my-packages '(better-defaults
+;; 		      paredit paredit-everywhere
+;;                       idle-highlight-mode find-file-in-project smex ido-ubiquitous magit
+;;                       dash company
+;;                       org rainbow-delimiters ace-jump-mode go-mode
+;;                       projectile visual-regexp
+;;                       powerline elisp-slime-nav
+;;                       color-theme-solarized soft-charcoal-theme spacegray-theme ample-theme zenburn-theme
+;;                       rainbow-identifiers yaml-mode markdown-mode use-package)
+;;   "A list of packages to ensure are installed at launch.")
 
 ;; (dolist (p my-packages)
 ;;   (when (not (package-installed-p p))
@@ -82,7 +82,7 @@
   :ensure t)
 
 (use-package paredit-everywhere
-  :ensure )
+  :ensure t)
 
 (use-package idle-highlight-mode
   :ensure t)
@@ -383,6 +383,34 @@ includes the deletion of new lines."
 
 (use-package git-link
   :ensure t)
+
+(require 'json)
+
+(defvar aws-long-term-id nil)
+(defvar aws-long-term-key nil)
+
+(defun set-aws-session-tokens (token)
+  "Set AWS session tokens into the emacs process"
+  (interactive "sMFA token: ")
+  (message "Token: %s" token)
+  ;; Long term tokens
+  (if (and (not aws-long-term-id) (not aws-long-term-key))
+      (setq aws-long-term-id (getenv "AWS_ACCESS_KEY_ID")
+            aws-long-term-key (getenv "AWS_SECRET_ACCESS_KEY"))
+    (progn (setenv "AWS_ACCESS_KEY_ID" aws-long-term-id)
+           (setenv "AWS_SECRET_ACCESS_KEY" aws-long-term-key)
+           (setenv "AWS_SESSION_TOKEN")))
+  (let ((aws-response (shell-command-to-string (format "aws sts get-session-token --duration-seconds 129600 --serial-number %s --token-code %s"
+                                                       (getenv "MFA_TOKEN_ARN")
+                                                       token))))
+    (message "AWS raw response: %s" aws-response)
+    (let* ((json-object-type 'plist)
+           (aws-json-response (plist-get (json-read-from-string aws-response) :Credentials)))
+      (setenv "AWS_ACCESS_KEY_ID" (plist-get aws-json-response :AccessKeyId))
+      (setenv "AWS_SECRET_ACCESS_KEY" (plist-get aws-json-response :SecretAccessKey))
+      (setenv "AWS_SESSION_TOKEN" (plist-get aws-json-response :SessionToken))
+aws-json-response)))
+
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
