@@ -298,6 +298,18 @@
 ;; DONE
 ;; make clojure code blocks work in org mode
 
+(defun maybe-git-auto-commit-mode ()
+  (let* ((bfn (buffer-file-name))
+         (root (and bfn (vc-git-root bfn)))
+         (full-root (and root (expand-file-name root))))
+    (if (string-equal full-root "/home/arthur/ownCloud/org/")
+        (git-auto-commit-mode +1))))
+
+(use-package git-auto-commit-mode
+  :ensure t
+  :config
+  (setq gac-automatically-push-p nil))
+
 (use-package org
   :ensure t
   :commands org-mode
@@ -316,7 +328,8 @@
   (setq org-startup-truncated nil)
   (setq org-log-done 'time)
   (setq org-tags-column (- 4 (window-width)))
-  (add-hook 'org-mode-hook 'flyspell-mode))
+  (add-hook 'org-mode-hook 'flyspell-mode)
+  (add-hook 'org-mode-hook #'maybe-git-auto-commit-mode))
 
 (require 'ob-clojure)
 
@@ -389,29 +402,6 @@ includes the deletion of new lines."
 (defvar aws-long-term-id nil)
 (defvar aws-long-term-key nil)
 
-(defun set-aws-session-tokens (token)
-  "Set AWS session tokens into the emacs process"
-  (interactive "sMFA token: ")
-  (message "Token: %s" token)
-  ;; Long term tokens
-  (if (and (not aws-long-term-id) (not aws-long-term-key))
-      (setq aws-long-term-id (getenv "AWS_ACCESS_KEY_ID")
-            aws-long-term-key (getenv "AWS_SECRET_ACCESS_KEY"))
-    (progn (setenv "AWS_ACCESS_KEY_ID" aws-long-term-id)
-           (setenv "AWS_SECRET_ACCESS_KEY" aws-long-term-key)
-           (setenv "AWS_SESSION_TOKEN")))
-  (let ((aws-response (shell-command-to-string (format "aws sts get-session-token --duration-seconds 129600 --serial-number %s --token-code %s"
-                                                       (getenv "MFA_TOKEN_ARN")
-                                                       token))))
-    (message "AWS raw response: %s" aws-response)
-    (let* ((json-object-type 'plist)
-           (aws-json-response (plist-get (json-read-from-string aws-response) :Credentials)))
-      (setenv "AWS_ACCESS_KEY_ID" (plist-get aws-json-response :AccessKeyId))
-      (setenv "AWS_SECRET_ACCESS_KEY" (plist-get aws-json-response :SecretAccessKey))
-      (setenv "AWS_SESSION_TOKEN" (plist-get aws-json-response :SessionToken))
-aws-json-response)))
-
-
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -427,9 +417,9 @@ aws-json-response)))
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (git-link org-bullets emojify emacs-emojify haskell-mode
-              (progn t elisp--witness--lisp)
-              which-key dockerfile-mode flycheck clj-refactor markdown-mode yaml-mode rainbow-identifiers zenburn-theme ample-theme spacegray-theme soft-charcoal-theme color-theme-solarized elisp-slime-nav powerline visual-regexp projectile go-mode ace-jump-mode rainbow-delimiters company magit ido-ubiquitous smex find-file-in-project idle-highlight-mode paredit-everywhere paredit color-theme better-defaults cider-spy cider use-package)))
+    (git-auto-commit-mode git-auto-commit git-link org-bullets emojify emacs-emojify haskell-mode
+                          (progn t elisp--witness--lisp)
+                          which-key dockerfile-mode flycheck clj-refactor markdown-mode yaml-mode rainbow-identifiers zenburn-theme ample-theme spacegray-theme soft-charcoal-theme color-theme-solarized elisp-slime-nav powerline visual-regexp projectile go-mode ace-jump-mode rainbow-delimiters company magit ido-ubiquitous smex find-file-in-project idle-highlight-mode paredit-everywhere paredit color-theme better-defaults cider-spy cider use-package)))
  '(safe-local-variable-values
    (quote
     ((prettier-js-args "--single-quote")
