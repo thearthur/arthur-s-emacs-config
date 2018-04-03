@@ -329,7 +329,14 @@
   (setq org-log-done 'time)
   (setq org-tags-column (- 4 (window-width)))
   (add-hook 'org-mode-hook 'flyspell-mode)
-  (add-hook 'org-mode-hook #'maybe-git-auto-commit-mode))
+  (add-hook 'org-mode-hook #'maybe-git-auto-commit-mode)
+  (require 'org-crypt)
+  (org-crypt-use-before-save-magic)
+  (setq org-tags-exclude-from-inheritance (quote ("crypt")))
+  ;; GPG key to use for encryption
+  ;; Either the Key ID or set to nil to use symmetric encryption.
+  (setq org-crypt-key "B66DFF01B50A93EA")
+  (define-key org-mode-map (kbd "C-M-s-d") 'org-decrypt-entry))
 
 (require 'ob-clojure)
 
@@ -417,9 +424,9 @@ includes the deletion of new lines."
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (git-auto-commit-mode git-auto-commit git-link org-bullets emojify emacs-emojify haskell-mode
-                          (progn t elisp--witness--lisp)
-                          which-key dockerfile-mode flycheck clj-refactor markdown-mode yaml-mode rainbow-identifiers zenburn-theme ample-theme spacegray-theme soft-charcoal-theme color-theme-solarized elisp-slime-nav powerline visual-regexp projectile go-mode ace-jump-mode rainbow-delimiters company magit ido-ubiquitous smex find-file-in-project idle-highlight-mode paredit-everywhere paredit color-theme better-defaults cider-spy cider use-package)))
+    (org-crypt git-auto-commit-mode git-auto-commit git-link org-bullets emojify emacs-emojify haskell-mode
+               (progn t elisp--witness--lisp)
+               which-key dockerfile-mode flycheck clj-refactor markdown-mode yaml-mode rainbow-identifiers zenburn-theme ample-theme spacegray-theme soft-charcoal-theme color-theme-solarized elisp-slime-nav powerline visual-regexp projectile go-mode ace-jump-mode rainbow-delimiters company magit ido-ubiquitous smex find-file-in-project idle-highlight-mode paredit-everywhere paredit color-theme better-defaults cider-spy cider use-package)))
  '(safe-local-variable-values
    (quote
     ((prettier-js-args "--single-quote")
