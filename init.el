@@ -15,45 +15,21 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-;; Copyright 2010, 2012, 2013, 2014, 2015 Arthur Ulfeldt
+;; Copyright 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Arthur Ulfeldt
 
 
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
-;(add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
 
 (when (not package-archive-contents)
   (package-refresh-contents))
-
-;; (defvar unstable-packages '(clojure-mode cider clj-refactor cider-spy flycheck-clojure flycheck-pos-tip)
-;;   "A list of packages to ensure are installed at launch.")
-
-;; (dolist (p unstable-packages)
-;;   (when (not (package-installed-p p))
-;;     (package-install p)))
 
  (setq package-archive-priorities
       '(("melpa" . 99)
         ("marmalade" . 20)
         ("org" . 15)
         ("melpa-stable" . 0)))
-
-;; Add in your own as you wish:
-;; (defvar my-packages '(better-defaults
-;; 		      paredit paredit-everywhere
-;;                       idle-highlight-mode find-file-in-project smex ido-ubiquitous magit
-;;                       dash company
-;;                       org rainbow-delimiters ace-jump-mode go-mode
-;;                       projectile visual-regexp
-;;                       powerline elisp-slime-nav
-;;                       color-theme-solarized soft-charcoal-theme spacegray-theme ample-theme zenburn-theme
-;;                       rainbow-identifiers yaml-mode markdown-mode use-package)
-;;   "A list of packages to ensure are installed at launch.")
-
-;; (dolist (p my-packages)
-;;   (when (not (package-installed-p p))
-;;     (package-install p)))
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -93,7 +69,7 @@
 (use-package smex
   :ensure t)
 
-(use-package ido-ubiquitous
+(use-package ido-completing-read+
   :ensure t)
 
 (use-package magit
@@ -115,6 +91,9 @@
   :ensure t)
 
 (use-package go-mode
+  :ensure t)
+
+(use-package diminish
   :ensure t)
 
 (use-package projectile
@@ -166,11 +145,7 @@
             (lambda ()
               (define-key clojure-mode-map (kbd "C-c SPC") 'avy-goto-word-1))))
 
-(require 'diminish)
-(require 'bind-key)
-
 (load-theme 'zenburn t)
-
 
 (use-package magit
   :ensure t
@@ -281,10 +256,6 @@
 
 (define-key global-map (kbd "M-W") 'yank-to-x-clipboard)
 
-
-;(remove-hook 'prog-mode-hook 'esk-turn-on-hl-line-mode)
-
-;(eval-after-load 'flycheck '(flycheck-clojure-setup))
 (use-package flycheck
   :ensure t
   :config
@@ -293,10 +264,6 @@
 
 (eval-after-load 'flycheck
   '(setq flycheck-display-errors-function #'flycheck-pos-tip-error-messages))
-
-;; if all children of a TODO are done, then change status of TODO to
-;; DONE
-;; make clojure code blocks work in org mode
 
 (defun maybe-git-auto-commit-mode ()
   (let* ((bfn (buffer-file-name))
@@ -335,7 +302,7 @@
   (setq org-tags-exclude-from-inheritance (quote ("crypt")))
   ;; GPG key to use for encryption
   ;; Either the Key ID or set to nil to use symmetric encryption.
-  (setq org-crypt-key "B66DFF01B50A93EA")
+  (setq org-crypt-key "A20F3E34E472C3BB")
   (define-key org-mode-map (kbd "C-M-s-d") 'org-decrypt-entry))
 
 (require 'ob-clojure)
@@ -363,28 +330,6 @@ includes the deletion of new lines."
     (interactive)
       (just-one-space -1))
 
-;; (use-package scala-mode2
-;;   :ensure t
-;;   :config (use-package ensime
-;;             :ensure t
-;;             :config (progn (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
-;;                            (defun scala/enable-eldoc ()
-;;                              "Show error message or type name at point by Eldoc."
-;;                              (setq-local eldoc-documentation-function
-;;                                          #'(lambda ()
-;;                                              (when (ensime-connected-p)
-;;                                                (let ((err (ensime-print-errors-at-point)))
-;;                                                  (or (and err (not (string= err "")) err)
-;;                                                      (ensime-print-type-at-point))))))
-;;                              (eldoc-mode +1))
-;;                            (add-hook 'scala-mode-hook 'scala/enable-eldoc))))
-
-;; guthub stuff
-(use-package magithub
-  :after magit
-  :ensure t
-  :config (magithub-feature-autoinject t))
-
 (use-package frames-only-mode
   :ensure t
   :config (frames-only-mode))
@@ -406,9 +351,6 @@ includes the deletion of new lines."
 
 (require 'json)
 
-(defvar aws-long-term-id nil)
-(defvar aws-long-term-key nil)
-
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -422,6 +364,7 @@ includes the deletion of new lines."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(inhibit-startup-screen t)
+ '(magit-commit-arguments (quote ("--gpg-sign=A20F3E34E472C3BB")))
  '(package-selected-packages
    (quote
     (org-crypt git-auto-commit-mode git-auto-commit git-link org-bullets emojify emacs-emojify haskell-mode
@@ -429,7 +372,9 @@ includes the deletion of new lines."
                which-key dockerfile-mode flycheck clj-refactor markdown-mode yaml-mode rainbow-identifiers zenburn-theme ample-theme spacegray-theme soft-charcoal-theme color-theme-solarized elisp-slime-nav powerline visual-regexp projectile go-mode ace-jump-mode rainbow-delimiters company magit ido-ubiquitous smex find-file-in-project idle-highlight-mode paredit-everywhere paredit color-theme better-defaults cider-spy cider use-package)))
  '(safe-local-variable-values
    (quote
-    ((prettier-js-args "--single-quote")
+    ((cider-refresh-after-fn . "connected-cooking.core/start-server")
+     (cider-refresh-before-fn . "connected-cooking.core/stop-server")
+     (prettier-js-args "--single-quote")
      (eval progn
            (put
             (quote defendpoint)
