@@ -45,8 +45,8 @@
   :ensure t
   :config (which-key-mode))
 
-(use-package cider-spy
-  :ensure t)
+;; (use-package cider-spy
+;;   :ensure t)
 
 (use-package better-defaults
   :ensure t)
@@ -99,7 +99,10 @@
 (use-package projectile
   :ensure t
   :config
-  (diminish 'projectile-mode))
+  (diminish 'projectile-mode)
+  (projectile-mode +1)
+  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
 (use-package visual-regexp
   :ensure t)
@@ -309,10 +312,6 @@
 
 (add-hook 'prog-mode-hook (lambda ()
                              (flyspell-prog-mode)))
-(use-package projectile
-  :ensure t
-  :config
-  (projectile-global-mode))
 
 (use-package powerline
   :config
