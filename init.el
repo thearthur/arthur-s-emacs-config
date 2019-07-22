@@ -38,6 +38,8 @@
 (eval-when-compile
   (require 'use-package))
 
+
+
 (use-package cider
   :ensure t)
 
@@ -57,13 +59,13 @@
 (use-package paredit
   :ensure t)
 
-(use-package paredit-everywhere
-  :ensure t)
-
 (use-package idle-highlight-mode
   :ensure t)
 
 (use-package find-file-in-project
+  :ensure t)
+
+(use-package groovy-mode
   :ensure t)
 
 (use-package smex
@@ -170,10 +172,12 @@
   (set-face-attribute 'cider-deprecated-face nil
                       :foreground nil
                       :background "#655")
+
   (set-face-attribute 'cider-test-error-face nil
                       :foreground nil
                       :background "#655")
-  (setq cljr-warn-on-eval nil))
+   ;; (setq cljr-warn-on-eval nil) ;; this line breaks things horribly
+  )
 
 (use-package cider-eldoc
   :config
@@ -183,6 +187,7 @@
   (setq cider-repl-print-length 100)
   (setq cider-prompt-for-symbol nil)
   (diminish 'eldoc-mode))
+
 
 (use-package company
   :ensure t
@@ -198,15 +203,18 @@
 (use-package clj-refactor
   :ensure t
   :config
-  (add-hook 'cider-mode-hook
-            (lambda ()
-              (clj-refactor-mode 1)
-              ;(cljr-add-keybindings-with-prefix "C-c C-m")
-              (define-key cider-mode-map (kbd "C-c C-m") 'hydra-cljr-help-menu/body)))
+  ;; (add-hook 'cider-mode-hook
+  ;;           (lambda ()
+  ;;             (clj-refactor-mode 1)
+  ;;             ;(cljr-add-keybindings-with-prefix "C-c C-m")
+  ;;             (define-key cider-mode-map (kbd "C-c C-m") 'hydra-cljr-help-menu/body)))
 
-  (add-hook 'nrepl-connected-hook #'cljr-update-artifact-cache)
-  (define-key clojure-mode-map (kbd "C-c C-m") 'hydra-cljr-help-menu/body)
-  (diminish 'clj-refactor-mode))
+  ;; ;(add-hook 'nrepl-connected-hook #'cljr-update-artifact-cache)
+  ;; (define-key clojure-mode-map (kbd "C-c C-m") 'hydra-cljr-help-menu/body)
+  ;; (diminish 'clj-refactor-mode)
+  )
+
+
 
 (use-package paredit
   :ensure t
@@ -348,7 +356,26 @@ includes the deletion of new lines."
 (use-package git-link
   :ensure t)
 
+(use-package arduino-mode
+  :ensure t)
+
+(use-package elfeed-org
+  :ensure t
+  :config
+  (elfeed-org)
+  (setq rmh-elfeed-org-files (list "/path/to/elfeed.org")))
+
 (require 'json)
+
+(use-package multiple-cursors
+  :ensure t
+  :config
+  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+  (global-set-key (kbd "C-S-w C-S-w") 'mc/mark-all-dwim)
+  (global-set-key (kbd "C-S-e C-S-e") 'mc/edit-ends-of-lines)
+  (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -366,12 +393,13 @@ includes the deletion of new lines."
  '(magit-commit-arguments (quote ("--gpg-sign=A20F3E34E472C3BB")))
  '(package-selected-packages
    (quote
-    (org-crypt git-auto-commit-mode git-auto-commit git-link org-bullets emojify emacs-emojify haskell-mode
-               (progn t elisp--witness--lisp)
-               which-key dockerfile-mode flycheck clj-refactor markdown-mode yaml-mode rainbow-identifiers zenburn-theme ample-theme spacegray-theme soft-charcoal-theme color-theme-solarized elisp-slime-nav powerline visual-regexp projectile go-mode ace-jump-mode rainbow-delimiters company magit ido-ubiquitous smex find-file-in-project idle-highlight-mode paredit-everywhere paredit color-theme better-defaults cider-spy cider use-package)))
+    (elfeed-org arduino-mode groovy-mode org-crypt git-auto-commit-mode git-auto-commit git-link org-bullets emojify emacs-emojify haskell-mode
+                (progn t elisp--witness--lisp)
+                which-key dockerfile-mode flycheck clj-refactor markdown-mode yaml-mode rainbow-identifiers zenburn-theme ample-theme spacegray-theme soft-charcoal-theme color-theme-solarized elisp-slime-nav powerline visual-regexp projectile go-mode ace-jump-mode rainbow-delimiters company magit ido-ubiquitous smex find-file-in-project idle-highlight-mode paredit-everywhere paredit color-theme better-defaults cider-spy cider use-package)))
  '(safe-local-variable-values
    (quote
-    ((cider-refresh-after-fn . "connected-cooking.core/start-server")
+    ((cider-preferred-build-tool . "clojure-cli")
+     (cider-refresh-after-fn . "connected-cooking.core/start-server")
      (cider-refresh-before-fn . "connected-cooking.core/stop-server")
      (prettier-js-args "--single-quote")
      (eval progn
@@ -432,4 +460,4 @@ includes the deletion of new lines."
              (with-redefs-fn 1)))))))
 
 (provide 'init)
-;;; init.el ends here
+; init.el ends here
