@@ -1,6 +1,3 @@
-(require 'package)
-(package-initialize)
-
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
@@ -18,10 +15,16 @@
 ;; Copyright 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Arthur Ulfeldt
 
 
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+;;(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+;;(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/") t)
+;;(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
+;; and `package-pinned-packages`. Most users will not need or want to do this.
+;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(package-initialize)
 (when (not package-archive-contents)
   (package-refresh-contents))
 
@@ -38,7 +41,23 @@
 (eval-when-compile
   (require 'use-package))
 
+(use-package riscv-mode
+  :ensure t)
 
+(use-package slime
+  :ensure t
+  :config
+  ;;(setq inferior-lisp-program "python3 /home/arthur/lab/ulisp-swank/server.py -p 4005 -b 'CP2104 USB to UART Bridge Controller'")
+  ;;(setq inferior-lisp-program "python3 /home/arthur/lab/ulisp-swank/server.py -p 4005 -b \"CP2104 USB to UART Bridge Controller")
+  (makunbound 'printfreespace) )
+
+(use-package web-server
+  :ensure t
+  :config
+  (require 'web-server))
+
+(use-package autotetris-mode
+  :ensure t)
 
 (use-package cider
   :ensure t)
@@ -53,8 +72,8 @@
 (use-package better-defaults
   :ensure t)
 
-(use-package color-theme
-  :ensure t)
+;; (use-package color-theme
+;;   :ensure t)
 
 (use-package paredit
   :ensure t)
@@ -118,6 +137,22 @@
 (use-package zenburn-theme
   :ensure t)
 
+(use-package solarized-theme
+  :ensure t)
+
+(use-package doom-themes
+  :ensure t)
+(use-package modus-vivendi-theme
+  :ensure t
+  :config
+  (load-theme 'modus-vivendi t)  )
+
+
+;; (load-theme 'zenburn t)
+;; (load-theme 'moe-theme t)
+;;(load-theme 'solarized-dark t)
+;;(load-theme 'doom-zenburn)
+
 (use-package rainbow-identifiers
   :ensure t)
 
@@ -141,6 +176,14 @@
   :config (progn (eval-after-load 'conf-mode
                    '(bind-key "C-c SPC" 'avy-goto-word-1 conf-mode-map))))
 
+
+;; (use-package flycheck-clj-kondo
+;;   :ensure t)
+
+(use-package  treemacs
+  :ensure t)
+
+
 (use-package clojure-mode
   :ensure t
   :config
@@ -148,9 +191,11 @@
   (add-hook 'before-save-hook #'delete-trailing-whitespace)
   (add-hook 'clojure-mode-hook
             (lambda ()
-              (define-key clojure-mode-map (kbd "C-c SPC") 'avy-goto-word-1))))
-
-(load-theme 'zenburn t)
+              (define-key clojure-mode-map (kbd "C-c SPC") 'avy-goto-word-1)))
+  (load "~/.emacs.d/cider-rebl/.emacs")
+  (require 'flycheck)
+  ;(require 'flycheck-clj-kondo)
+  )
 
 (use-package magit
   :ensure t
@@ -203,30 +248,36 @@
 (use-package clj-refactor
   :ensure t
   :config
-  ;; (add-hook 'cider-mode-hook
-  ;;           (lambda ()
-  ;;             (clj-refactor-mode 1)
-  ;;             ;(cljr-add-keybindings-with-prefix "C-c C-m")
-  ;;             (define-key cider-mode-map (kbd "C-c C-m") 'hydra-cljr-help-menu/body)))
+
+  (defun my-clojure-mode-hook ()
+    (clj-refactor-mode 1)
+    (flycheck-mode)
+    (yas-minor-mode 1) ; for adding require/use/import statements
+    ;; This choice of keybinding leaves cider-macroexpand-1 unbound
+    (cljr-add-keybindings-with-prefix "C-c C-m"))
+
+  (add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
+
 
   ;; ;(add-hook 'nrepl-connected-hook #'cljr-update-artifact-cache)
   ;; (define-key clojure-mode-map (kbd "C-c C-m") 'hydra-cljr-help-menu/body)
   ;; (diminish 'clj-refactor-mode)
   )
 
-
+(setq display-line-numbers 'relative)
 
 (use-package paredit
   :ensure t
   :config
-  (define-key paredit-mode-map (kbd "C-M-]") 'paredit-forward-barf-sexp)
-  (define-key paredit-mode-map (kbd "C-M-[") 'paredit-backward-barf-sexp)
-  (define-key paredit-mode-map (kbd "M-]") 'paredit-forward-slurp-sexp)
-  (define-key paredit-mode-map (kbd "M-[") 'paredit-backward-slurp-sexp)
+  ;; (define-key paredit-mode-map (kbd "C-M-]") 'paredit-forward-barf-sexp)
+  ;; (define-key paredit-mode-map (kbd "C-M-[") 'paredit-backward-barf-sexp)
+  ;; (define-key paredit-mode-map (kbd "M-]") 'paredit-forward-slurp-sexp)
+  ;; (define-key paredit-mode-map (kbd "M-[") 'paredit-backward-slurp-sexp)
   (add-hook 'cider-repl-mode-hook 'paredit-mode)
   (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
   (add-hook 'clojure-mode-hook 'paredit-mode)
-  (add-hook 'nrepl-mode-hook 'paredit-mode))
+  (add-hook 'nrepl-mode-hook 'paredit-mode)
+  (diminish 'paredit))
 
 ;; Append result of evaluating previous expression (Clojure):
 (defun cider-eval-last-sexp-and-append ()
@@ -301,7 +352,6 @@
   ;; make source code in org-mode files look pretty
   (setq org-src-fontify-natively t)
   (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
-  (add-hook 'org-mode-hook 'org-indent-home)
   (setq org-hide-leading-stars t)
   (setq org-startup-truncated nil)
   (setq org-log-done 'time)
@@ -314,7 +364,9 @@
   ;; GPG key to use for encryption
   ;; Either the Key ID or set to nil to use symmetric encryption.
   (setq org-crypt-key "A20F3E34E472C3BB")
-  (define-key org-mode-map (kbd "C-M-s-d") 'org-decrypt-entry))
+  (define-key org-mode-map (kbd "C-M-s-d") 'org-decrypt-entry)
+  (setq org-todo-keywords
+      '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)"))))
 
 (require 'ob-clojure)
 
@@ -363,7 +415,40 @@ includes the deletion of new lines."
   :ensure t
   :config
   (elfeed-org)
-  (setq rmh-elfeed-org-files (list "/path/to/elfeed.org")))
+  (setq rmh-elfeed-org-files (list "/home/arthur/ownCloud/org/rss.org")))
+
+(use-package elfeed
+  :ensure t
+  :bind (:map elfeed-search-mode-map
+              ("A" . bjm/elfeed-show-all)
+              ("E" . bjm/elfeed-show-emacs)
+              ("D" . bjm/elfeed-show-daily)
+              ("q" . bjm/elfeed-save-db-and-bury))
+  :config
+  (defun bjm/elfeed-show-all ()
+    (interactive)
+    (bookmark-maybe-load-default-file)
+    (bookmark-jump "elfeed-all"))
+  (defun bjm/elfeed-show-emacs ()
+    (interactive)
+    (bookmark-maybe-load-default-file)
+    (bookmark-jump "elfeed-emacs"))
+  (defun bjm/elfeed-show-daily ()
+    (interactive)
+    (bookmark-maybe-load-default-file)
+    (bookmark-jump "elfeed-daily"))
+  (defun bjm/elfeed-load-db-and-open ()
+    "Wrapper to load the elfeed db from disk before opening"
+    (interactive)
+    (elfeed-db-load)
+    (elfeed)
+    (elfeed-search-update--force))
+  ;;write to disk when quiting
+  (defun bjm/elfeed-save-db-and-bury ()
+    "Wrapper to save the elfeed db to disk before burying buffer"
+    (interactive)
+    (elfeed-db-save)
+    (quit-window)))
 
 (require 'json)
 
@@ -376,6 +461,67 @@ includes the deletion of new lines."
   (global-set-key (kbd "C->") 'mc/mark-next-like-this)
   (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
   (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this))
+
+(use-package lsp-mode
+  :ensure t
+  :hook ((clojure-mode . lsp)
+         (clojurec-mode . lsp)
+         (clojurescript-mode . lsp))
+  :config
+  ;; add paths to your local installation of project mgmt tools, like lein
+  (setenv "PATH" (concat
+                  "/usr/local/bin" path-separator
+                  (getenv "PATH")))
+  (dolist (m '(clojure-mode
+               clojurec-mode
+               clojurescript-mode
+               clojurex-mode))
+    (add-to-list 'lsp-language-id-configuration `(,m . "clojure")))
+  (setq lsp-clojure-server-command '("/usr/sbin/clojure-lsp"))
+  (setq lsp-lens-enable t)
+  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
+
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode)
+
+(use-package lsp-treemacs
+  :ensure t
+  :config
+  (lsp-treemacs-sync-mode 1))
+
+(defun rk/rustic-mode-hook ()
+  ;; so that run C-c C-c C-r works without having to confirm, but don't try to
+  ;; save rust buffers that are not file visiting. Once
+  ;; https://github.com/brotzeit/rustic/issues/253 has been resolved this should
+  ;; no longer be necessary.
+  (when buffer-file-name
+    (setq-local buffer-save-without-query t)))
+
+(use-package rustic
+  :ensure
+  :bind (:map rustic-mode-map
+              ("M-j" . lsp-ui-imenu)
+              ("M-?" . lsp-find-references)
+              ("C-c C-c l" . flycheck-list-errors)
+              ("C-c C-c a" . lsp-execute-code-action)
+              ("C-c C-c r" . lsp-rename)
+              ("C-c C-c q" . lsp-workspace-restart)
+              ("C-c C-c Q" . lsp-workspace-shutdown)
+              ("C-c C-c s" . lsp-rust-analyzer-status))
+  :config
+  ;; uncomment for less flashiness
+  ;; (setq lsp-eldoc-hook nil)
+  ;; (setq lsp-enable-symbol-highlighting nil)
+  ;; (setq lsp-signature-auto-activate nil)
+
+  ;; comment to disable rustfmt on save
+  (setq rustic-format-on-save t)
+  (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook))
+
+(global-display-line-numbers-mode 1)
+(setq display-line-numbers-type 'relative)
+
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -390,39 +536,23 @@ includes the deletion of new lines."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(inhibit-startup-screen t)
- '(magit-commit-arguments (quote ("--gpg-sign=A20F3E34E472C3BB")))
+ '(magit-commit-arguments '("--gpg-sign=A20F3E34E472C3BB"))
+ '(org-agenda-files '("~/ownCloud/org/log.org.gpg"))
  '(package-selected-packages
-   (quote
-    (elfeed-org arduino-mode groovy-mode org-crypt git-auto-commit-mode git-auto-commit git-link org-bullets emojify emacs-emojify haskell-mode
-                (progn t elisp--witness--lisp)
-                which-key dockerfile-mode flycheck clj-refactor markdown-mode yaml-mode rainbow-identifiers zenburn-theme ample-theme spacegray-theme soft-charcoal-theme color-theme-solarized elisp-slime-nav powerline visual-regexp projectile go-mode ace-jump-mode rainbow-delimiters company magit ido-ubiquitous smex find-file-in-project idle-highlight-mode paredit-everywhere paredit color-theme better-defaults cider-spy cider use-package)))
+   '(flycheck-clj-kondo riscv riscv-mode web-server tron-mode tron autotetris-mode slime elfeed-org arduino-mode groovy-mode org-crypt git-auto-commit-mode git-auto-commit git-link org-bullets emojify emacs-emojify haskell-mode
+                        (progn t elisp--witness--lisp)
+                        which-key dockerfile-mode flycheck clj-refactor markdown-mode yaml-mode rainbow-identifiers zenburn-theme ample-theme spacegray-theme soft-charcoal-theme color-theme-solarized elisp-slime-nav powerline visual-regexp projectile go-mode ace-jump-mode rainbow-delimiters company magit ido-ubiquitous smex find-file-in-project idle-highlight-mode paredit-everywhere paredit color-theme better-defaults cider-spy cider use-package))
  '(safe-local-variable-values
-   (quote
-    ((cider-preferred-build-tool . "clojure-cli")
+   '((cider-preferred-build-tool . "clojure-cli")
      (cider-refresh-after-fn . "connected-cooking.core/start-server")
      (cider-refresh-before-fn . "connected-cooking.core/stop-server")
      (prettier-js-args "--single-quote")
      (eval progn
-           (put
-            (quote defendpoint)
-            (quote clojure-doc-string-elt)
-            3)
-           (put
-            (quote api/defendpoint)
-            (quote clojure-doc-string-elt)
-            3)
-           (put
-            (quote defsetting)
-            (quote clojure-doc-string-elt)
-            2)
-           (put
-            (quote setting/defsetting)
-            (quote clojure-doc-string-elt)
-            2)
-           (put
-            (quote s/defn)
-            (quote clojure-doc-string-elt)
-            2)
+           (put 'defendpoint 'clojure-doc-string-elt 3)
+           (put 'api/defendpoint 'clojure-doc-string-elt 3)
+           (put 'defsetting 'clojure-doc-string-elt 2)
+           (put 'setting/defsetting 'clojure-doc-string-elt 2)
+           (put 's/defn 'clojure-doc-string-elt 2)
            (define-clojure-indent
              (api-let 2)
              (assert 1)
@@ -457,7 +587,7 @@ includes the deletion of new lines."
              (select 1)
              (sync-in-context 2)
              (when-testing-engine 1)
-             (with-redefs-fn 1)))))))
+             (with-redefs-fn 1))))))
 
 (provide 'init)
 ; init.el ends here
